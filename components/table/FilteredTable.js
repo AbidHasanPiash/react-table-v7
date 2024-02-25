@@ -2,7 +2,7 @@
 import MOCK_DATA from '@/data/MOCK_DATA.json'
 import { useMemo } from 'react'
 import { COLUMN, GROUPED_COLUMN } from './Columns'
-import { useTable, useSortBy, useGlobalFilter } from 'react-table'
+import { useTable, useSortBy, useGlobalFilter, useFilters } from 'react-table'
 import GlobalFilter from './GlobalFilter'
 
 export default function FilteredTable() {
@@ -17,7 +17,7 @@ export default function FilteredTable() {
         prepareRow,
         state: { globalFilter },
         setGlobalFilter,
-    } = useTable({ columns, data}, useGlobalFilter, useSortBy )
+    } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy);
   return (
     <div>
         <div className='flex items-center justify-between p-4'>
@@ -48,6 +48,7 @@ export default function FilteredTable() {
                                     ) : ''}
                                     </span>
                                 </p>
+                                <div>{column.canFilter ? column.render('Filter') : null}</div>
                             </th>
                         ))}
                     </tr>
