@@ -2,9 +2,9 @@
 import MOCK_DATA from '@/data/MOCK_DATA.json'
 import { useMemo } from 'react'
 import { COLUMN, GROUPED_COLUMN } from './Columns'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
-export default function BasicTable() {
+export default function SortedTable() {
     const columns = useMemo(()=> COLUMN, [])
     const data = useMemo(()=> MOCK_DATA, [])
     const {
@@ -14,15 +14,22 @@ export default function BasicTable() {
         footerGroups,
         rows,
         prepareRow
-    } = useTable({ columns, data})
+    } = useTable({ columns, data}, useSortBy)
   return (
     <table {...getTableProps()} className="table-auto border-collapse w-full">
         <thead>
             {headerGroups.map(headerGroup => (
                 <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-300">
                     {headerGroup.headers.map(column => (
-                        <th {...column.getHeaderProps()} className="px-4 py-2 text-left">
-                            {column.render('Header')}
+                        <th {...column.getHeaderProps(column.getSortByToggleProps())} className="px-4 py-2 text-left">
+                            <p className='flex items-center justify-start space-x-4'>
+                                <span>{column.render('Header')}</span>
+                                <span>
+                                {column.isSorted ? (
+                                    column.isSortedDesc ? '⬇️' : '⬆️'
+                                ) : ''}
+                                </span>
+                            </p>
                         </th>
                     ))}
                 </tr>
