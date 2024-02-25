@@ -1,7 +1,7 @@
 export const COLUMN = [
-    {Header: 'ID', Accessor: 'id'},
-    {Header: 'First Name', Accessor: 'first_name'},
-    {Header: 'Last Name', Accessor: 'last_name'},
-    {Header: 'Email', Accessor: 'email'},
-    {Header: 'Gender', Accessor: 'gender'},
+    {Header: 'ID', accessor: 'id'},
+    {Header: 'First Name', accessor: 'first_name'},
+    {Header: 'Last Name', accessor: 'last_name'},
+    {Header: 'Email', accessor: 'email'},
+    {Header: 'Gender', accessor: 'gender'},
 ]
