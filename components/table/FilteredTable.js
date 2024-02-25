@@ -4,10 +4,14 @@ import { useMemo } from 'react'
 import { COLUMN, GROUPED_COLUMN } from './Columns'
 import { useTable, useSortBy, useGlobalFilter, useFilters } from 'react-table'
 import GlobalFilter from './GlobalFilter'
+import ColumnFilter from './ColumnFilter'
 
 export default function FilteredTable() {
     const columns = useMemo(()=> COLUMN, [])
     const data = useMemo(()=> MOCK_DATA, [])
+    const defaultColumn = useMemo(()=>{
+        return{ Filter: ColumnFilter },[]}
+    )
     const {
         getTableProps,
         getTableBodyProps,
@@ -17,7 +21,7 @@ export default function FilteredTable() {
         prepareRow,
         state: { globalFilter },
         setGlobalFilter,
-    } = useTable({ columns, data }, useFilters, useGlobalFilter, useSortBy);
+    } = useTable({ columns, data, defaultColumn }, useFilters, useGlobalFilter, useSortBy);
   return (
     <div>
         <div className='flex items-center justify-between p-4'>
@@ -40,15 +44,17 @@ export default function FilteredTable() {
                     <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-300">
                         {headerGroup.headers.map(column => (
                             <th {...column.getHeaderProps(column.getSortByToggleProps())} className="px-4 py-2 text-left">
-                                <p className='flex items-center justify-start space-x-4'>
-                                    <span>{column.render('Header')}</span>
-                                    <span>
-                                    {column.isSorted ? (
-                                        column.isSortedDesc ? '⬇️' : '⬆️'
-                                    ) : ''}
-                                    </span>
-                                </p>
-                                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                                <div className='flex'>
+                                    <p className='flex items-center justify-start space-x-4'>
+                                        <span>{column.render('Header')}</span>
+                                        <span>
+                                        {column.isSorted ? (
+                                            column.isSortedDesc ? '⬇️' : '⬆️'
+                                        ) : ''}
+                                        </span>
+                                    </p>
+                                    <div>{column.canFilter ? <ColumnFilter column={column}/> : null}</div>
+                                </div>
                             </th>
                         ))}
                     </tr>
