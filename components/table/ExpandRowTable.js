@@ -1,5 +1,6 @@
 'use client'
 import MOCK_DATA from '@/data/MOCK_DATA.json'
+import MOCK_DATA_N from '@/data/MOCK_DATA_N.json'
 import React, { useMemo, useState } from 'react'
 import { COLUMN, GROUPED_COLUMN } from './Columns'
 import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination, useRowSelect, useExpanded } from 'react-table'
@@ -24,7 +25,7 @@ export default function ExpandRowTable() {
             ...defaultColumns,
         ]; // Add the expanded column to the beginning of the array
     }, []);
-    const data = useMemo(() => MOCK_DATA, []);
+    const data = useMemo(() => MOCK_DATA_N, []);
 
     const {
         getTableProps,
@@ -125,7 +126,7 @@ export default function ExpandRowTable() {
                                         </td>
                                     ))}
                                 </tr>
-                                {row.isExpanded ? ( // Render expanded row if row is expanded
+                                {row.isExpanded && row.original.children ? ( // Render expanded row if row is expanded
                                     <tr>
                                         <td colSpan={columns.length}>
                                             <div>
@@ -189,6 +190,7 @@ export default function ExpandRowTable() {
                     </button>
                 </div>
             </div>
+            {/* Code for display selected rows  */}
             <pre>
                 <code>{JSON.stringify({ selectedID: selectedFlatRows.map((row) => row.original.id) }, null, 2)}</code>
             </pre>
