@@ -78,6 +78,30 @@ export default function ExpandRowTable() {
             });
         }
     );
+    
+    const RenderRow = ({ row }) => {
+        prepareRow(row);
+        return (
+            <>
+                <tr {...row.getRowProps()} className="border-t border-gray-200 hover:bg-gray-100 even:bg-gray-50">
+                    {row.cells.map((cell, index) => (
+                        <td {...cell.getCellProps()} className="px-4 py-2">
+                            {cell.render('Cell')}
+                        </td>
+                    ))}
+                </tr>
+                {/* Conditionally render expanded row */}
+                {row.isExpanded && row.original.children.map((child, index) => (
+                    <tr key={child.id} className="border border-gray-200 hover:bg-gray-100 even:bg-gray-50">
+                        <td>{child.first_name}</td>
+                        <td>{child.last_name}</td>
+                        <td>{child.email}</td>
+                        <td>{child.gender}</td>
+                    </tr>
+                ))}
+            </>
+        );
+    };
 
     return (
         <div>
@@ -115,29 +139,9 @@ export default function ExpandRowTable() {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {page.map((row) => {
+                    {page.map(row => {
                         prepareRow(row);
-                        return (
-                            <React.Fragment key={row.id}>
-                                <tr {...row.getRowProps()} className="border-t border-gray-200 hover:bg-gray-100 even:bg-gray-50">
-                                    {row.cells.map((cell, index) => (
-                                        <td {...cell.getCellProps()} className="px-4 py-2">
-                                            {cell.render('Cell')}
-                                        </td>
-                                    ))}
-                                </tr>
-                                {row.isExpanded && row.original.children ? ( // Render expanded row if row is expanded
-                                    <tr>
-                                        <td colSpan={columns.length}>
-                                            <div>
-                                                {/* Add your nested data rendering here */}
-                                                hello
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : null}
-                            </React.Fragment>
-                        );
+                        return <RenderRow key={row.id} row={row} />;
                     })}
                 </tbody>
                 <tfoot>
